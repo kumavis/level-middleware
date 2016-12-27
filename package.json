@@ -1,10 +1,10 @@
 {
-  "name": "triplesecdown",
-  "version": "3.0.1",
-  "description": "leveldb middleware for encrypted storage via triplesec",
+  "name": "level-middleware",
+  "version": "1.0.0",
+  "description": "leveldb middleware",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -22,10 +22,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kumavis/triplesecdown.git"
+    "url": "git+https://github.com/kumavis/level-middleware.git"
   },
   "bugs": {
-    "url": "https://github.com/kumavis/triplesecdown/issues"
+    "url": "https://github.com/kumavis/level-middleware/issues"
   },
-  "homepage": "https://github.com/kumavis/triplesecdown#readme"
+  "homepage": "https://github.com/kumavis/level-middleware#readme"
 }

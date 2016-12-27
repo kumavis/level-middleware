@@ -1,22 +1,26 @@
 const test = require('tape')
-const memdown = require('memdown')
-const TriplesecDown = require('../index.js')
+const LevelDown = require('memdown')
+const LevelMiddlewareFactory = require('../index')
 
 test('basic tests', function(t){
   t.plan(3)
 
-  setupDb(function(leveldown, internalDb){
+  let testKey1 = 'test1'
+  let testValue1 = 'fruitface'
 
-    var testKey1 = 'test1'
-    var testValue1 = 'fruitface'
-    var testKey2 = 'test2'
-    var testValue2 = 'snakeoil'
+  function mutateKey(key){
+    return `x-${key}-y`
+  }
+
+  setupDb({
+    put: (key, value, cb) => cb(null, mutateKey(key), value)
+  }, function(leveldown, internalDb){
 
     leveldown.put(testKey1, testValue1, function(err){
       t.notOk(err, 'no error')
-      leveldown.get(testKey1, function(err, value){
+      internalDb.get(mutateKey(testKey1), function(err, value){
         t.notOk(err, 'no error')
-        t.equal(testValue1, value.toString(), 'reread set value')
+        t.equal(testValue1, value.toString(), 'value is added at modified key')
       })
     })
 
@@ -25,14 +29,13 @@ test('basic tests', function(t){
 })
 
 
-function setupDb(cb){
+function setupDb(opts, cb){
 
-  var internalDb = null
-  var leveldown = TriplesecDown({
-    secret: 'super_secret',
-    db: function(){ internalDb = memdown(); return internalDb; },
-  })()
+  let MyMiddleware = LevelMiddlewareFactory(opts)
 
-  leveldown.open( cb.bind(null, leveldown, internalDb) )
+  let internalDb = LevelDown()
+  let wrappedDb = MyMiddleware(internalDb)
+
+  wrappedDb.open( () => cb(wrappedDb, internalDb) )
 
 }

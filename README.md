@@ -1,14 +1,30 @@
-leveldb middleware for encrypted storage via triplesec
+leveldb middleware for re-encoding keys or values
 
+### status: EXPERIMENTAL
+
+Using key/value re-encoder
 ```js
-const levelup = require('levelup')
-const indexedDbDown = require('level-js')
-const triplesecdown = require('triplesecdown')
+const LevelDown = require('memdown')
+const EncoderMiddleware = require('level-middleware')
 
-var db = levelup('/not/used/', {
-  db: triplesecdown({
-    secret: 'sup3r_s3cr3t!',
-    db: indexedDbDown,
-  })
+let MyMiddleware = EncoderMiddleware({
+  key: (key, cb) => { ... },
+  value: (value, cb) => { ... },
 })
+
+let db = MyMiddleware(LevelDown())
+```
+
+Per-operation overrides
+```js
+const LevelDown = require('memdown')
+const LevelMiddlewareFactory = require('level-middleware')
+
+let MyMiddleware = LevelMiddlewareFactory({
+  get: (key, cb) => { ... },
+  put: (key, value, cb) => { ... },
+  del: (key, cb) => { ... },
+})
+
+let db = MyMiddleware(LevelDown())
 ```
