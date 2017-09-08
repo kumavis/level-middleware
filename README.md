@@ -2,6 +2,8 @@ leveldb middleware for re-encoding keys or values
 
 ### status: EXPERIMENTAL
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kumavis/level-middleware.svg)](https://greenkeeper.io/)
+
 Using key/value re-encoder
 ```js
 const LevelDown = require('memdown')
